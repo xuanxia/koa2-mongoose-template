@@ -1,0 +1,109 @@
+<html>
+<head>
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="static/plugins/bootstrap-3.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/css/animate.css">
+    <link rel="stylesheet" href="static/css/common.css">
+    <script src="static/js/jquery-min-2.1.0.js"></script>
+    <script src="static/js/headroom.min.js"></script>
+    <script src="static/plugins/bootstrap-3.3.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+{% block header %}
+<header id="header"  class="header header--fixed" role="banner">
+    <div class="container">
+        <b class="brand__forename">网站模板下载</b>
+        <b class="brand_link">
+            <a href="#">github</a>
+            <a href="http://120.27.125.78/wordpress/">myBlog</a>
+        </b>
+    </div>
+</header>
+
+{% endblock %}
+{% block body %} <div>No body</div> {% endblock %}
+{% block footer %}
+<div class="footer">
+    <div class="footer-top">
+        <div class="container">
+            <div class="col-md-4 footer-grid">
+                <h5>技术栈</h5>
+                <p>
+                    <a target="_blank" href="https://nodejs.org/en/">nodejs</a>
+                    <br>
+                    <a target="_blank" href="http://koa.bootcss.com/">koa2</a>
+                    <br>
+                    <a target="_blank" href="https://www.mongodb.com/">mongoDB</a>
+                    <br>
+                    <a target="_blank" href="http://www.nodeclass.com/api/mongoose.html">mongoose</a>
+                    <br>
+                    <a target="_blank" href="http://babeljs.io/">babel</a>
+                    <br>
+                    <a target="_blank" href="http://mozilla.github.io/nunjucks/">nunjucks</a>
+                    <br>
+                    <a target="_blank" href="http://es6.ruanyifeng.com/">ES6</a>
+
+                </p>
+            </div>
+            <div class="col-md-4 footer-grid">
+                <h5>资源站点</h5>
+                <p>
+                    <a target="_blank" href="http://www.cssmoban.com/">模板之家</a>
+                    <br>
+                    <a target="_blank" href="http://www.ecmoban.com/">模板堂</a>
+                    <br>
+                    <a target="_blank" href="http://www.mycodes.net/">源码之家</a>
+                    <br>
+
+                    <a target="_blank" href="http://jz.faisco.com/">凡科建站</a>
+                    <br>
+                    <a target="_blank" href="#">...</a>
+                    <br>
+                </p>
+            </div>
+            <div class="col-md-4 footer-grid">
+                <h5>说明</h5>
+                <p>本网站使用搜索脚本下载资源，整合资源。仅供学习使用。代码开源在
+                    <a href="#">github</a>
+                    上。有兴趣的可以一起来丰富此站点</p>
+                <div class="social-icons footer-social-icons">
+                    <a href="#"><i class="facebook"></i></a>
+                    <a href="#"><i class="twitter"></i></a>
+                    <a href="#"><i class="google-plus"></i></a>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div class="container">
+            <div class="copyrights col-md-10">
+                <p>Copyright © 2016 此站点仅供学习参考</p>
+            </div>
+            <div class="go-top col-md-2">
+                <a href="#" class="scroll"><span class="glyphicon glyphicon-chevron-up"></span></a>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+<script>
+    var header = document.getElementById("header");
+    var headroom = new Headroom(header, {
+        // scroll tolerance in px before state changes
+        "tolerance": 5,
+        // 在元素没有固定之前，垂直方向的偏移量（以px为单位）
+        "offset": 205,
+        "classes": {
+            // 当元素初始化后所设置的class
+            "initial": "animated",  //
+            // 向上滚动时设置的class
+            "pinned": "flipInX", // slideDown  flipInX swingInX  bounceInDown
+            // 向下滚动时所设置的class
+            "unpinned": "flipOutX" //slideUp  flipOutX swingOutX  bounceOutUp
+        }
+    });
+    headroom.init();
+</script>
+{% endblock %}
+</body>
