@@ -32,14 +32,14 @@ module.exports.query = async (prams)=>{
             total = count;
         }
     });
-    await TemplateModel.find({ $or:[{keyword:{"$regex":regex}},{title:{"$regex":regex}}]}).skip(skipCount).limit(limitCount).sort(sortconf).exec(function(err,doc){
+    await TemplateModel.find({ $or:[{keyword:{"$regex":regex}},{title:{"$regex":regex}}]}).skip(skipCount).limit(limitCount).sort(sortconf).exec(function(err,result){
         if(err){
             logger.error("biz_template.js--query"+err);
             returnData.setStatus(0);
             returnData.setMessage("查询失败");
         }else{
             let pageData = new PageData();
-            pageData.setDatalist(doc);
+            pageData.setDatalist(result);
             /*(page,pagesize,total,sortName,sortType,keyword)*/
             logger.debug(prams.keyword);
             pageData.setModel(currentpage,limitCount,total,prams.sortname ||"",prams.sorttype||"",prams.keyword ||"");
