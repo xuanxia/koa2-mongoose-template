@@ -43,7 +43,6 @@ module.exports.query = async (prams)=>{
             /*(page,pagesize,total,sortName,sortType,keyword)*/
             logger.debug(prams.keyword);
             pageData.setModel(currentpage,limitCount,total,prams.sortname ||"",prams.sorttype||"",prams.keyword ||"");
-            logger.debug(pageData);
             returnData.setStatus(1);
             returnData.setMessage("查询成功");
             returnData.setData(pageData);
@@ -53,9 +52,29 @@ module.exports.query = async (prams)=>{
 };
 
 module.exports.save = async(prams)=>{
-     const template = new TemplateModel(prams);
         //TODO
 
 };
 
+module.exports.update = async(prams)=>{
+    let returnData = new ResultData();
+    await TemplateModel.update({ _id: prams.id }, { $inc: { downloadCount: 1 }}).exec(function(err,result){
+        if(err){
+            logger.error("biz_template.js--update"+err);
+            returnData.setStatus(0);
+            returnData.setMessage("更新失败");
+        }else{
+            logger.debug(result);
+            returnData.setStatus(1);
+            returnData.setMessage("更新成功");
+            returnData.setData(result);
+        }
+    });
 
+    return returnData;
+};
+
+module.exports.remove = async(prams)=>{
+    //TODO
+
+};

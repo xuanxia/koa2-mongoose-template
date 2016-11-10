@@ -10,7 +10,8 @@ module.exports = {
     qiniuHash  :    String,
     qiniuUrl   :    String,
     title      :    String,
-    type       :    String
+    type       :    String,
+    downloadCount:  Number
 };
 /*
 *

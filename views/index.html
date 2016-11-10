@@ -17,7 +17,7 @@
                 <div class="caption">
                     <!--<h3></h3>-->
                     <p style="height: 40px">{{item.title}}</p>
-                    <p><a href="{{baseInfo.qiniuHost}}{{item.qiniuUrl}}" class="btn btn-primary" role="button">下载</a>
+                    <p><a href="{{baseInfo.qiniuHost}}{{item.qiniuUrl}}" onclick="updateDownloadCount('{{item.id}}')" class="btn btn-primary" role="button">下载</a>
                         <a href="{{baseInfo.preViewHost}}{{item.preViewPath}}" target="_blank" class="btn btn-danger" role="button">预览</a></p>
                 </div>
             </div>
@@ -165,6 +165,23 @@
             temp = temp.replace("{[(" + i + ")]}", arrA[i]);
         }
         pucl.innerHTML = temp;
+    }
+
+    /*
+    *
+    * 统计下载数量
+    * */
+
+    function updateDownloadCount(id){
+        $.ajax({
+            url:"/template/update/",
+            type:'post',
+            dataType:"json",
+            data:{id:id},
+            success:function(data){
+                console.log(data);
+            }
+        });
     }
 
 </script>
