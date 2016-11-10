@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const TemplateVo = require('../dbm/Template.js');
 const TemplateSchema = new mongoose.Schema(TemplateVo,{collection:"template_base"});
 const TemplateModel = db.model("template_base",TemplateSchema);
-const logger = require('log4js').getLogger();
+const logger = require('../comm_unit/log4js.js');
 const ResultData = require('../comm_unit/data_structure.js').ResultData;
 const PageData = require('../comm_unit/data_structure.js').PageData;
 module.exports.query = async (prams)=>{

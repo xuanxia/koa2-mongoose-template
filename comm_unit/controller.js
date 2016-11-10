@@ -1,4 +1,4 @@
-const logger = require('log4js').getLogger();
+const logger = require('../comm_unit/log4js.js');
 const fs = require('fs');
 function addMapping(router, mapping) {
     for (var url in mapping) {

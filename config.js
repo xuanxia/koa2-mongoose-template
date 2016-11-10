@@ -1,6 +1,6 @@
 module.exports = {
     mongodb:{
-        host:"127.0.0.1",
+        host:"120.27.125.78",
         port:"27017",
         dataBaseName:"template",
         options :{
@@ -10,14 +10,14 @@ module.exports = {
     },
     log4js:{
         appenders: [
-            /*{ type: "console" },*/
+            { type: "console" },
             {
                 "type": "file",
                 "absolute": true,
                 "filename": "C:/D/logs/template.log",
                 "maxLogSize": 20480,
                 "backups": 10,
-                "category": "relative-logger"
+                "category": "debug"
             }
         ],
         replaceConsole: true
