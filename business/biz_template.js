@@ -1,7 +1,7 @@
 const db = require('../comm_unit/dbconn.js');
 const mongoose = require("mongoose");
 const TemplateVo = require('../dbm/Template.js');
-const TemplateSchema = new mongoose.Schema(TemplateVo,{collection:"template_base"});
+const TemplateSchema = new mongoose.Schema(TemplateVo);
 const TemplateModel = db.model("template_base",TemplateSchema);
 const logger = require('../comm_unit/log4js.js');
 const ResultData = require('../comm_unit/data_structure.js').ResultData;

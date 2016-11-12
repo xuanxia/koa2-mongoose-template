@@ -4,24 +4,18 @@
 * */
 const pageurlBiz = require('../business/biz_pageurl.js');
 const logger = require('../comm_unit/log4js.js');
-
-
-
-
+const getPageUrlList = require('../crawler/cra_pageurl2.js');
 
 var update = async(ctx,next)=>{
     logger.debug(ctx.request.body);
-    const returnData = await pageurlBiz.update(ctx.request.body);
+   // const returnData = await pageurlBiz.update(ctx.request.body);
+    let returnData = await getPageUrlList();
     ctx.response.type = 'application/json';
     ctx.response.body = returnData
 };
 
 
 
-
-
-
-
 module.exports = {
-    'POST /pageurl/update/': update
+    'GET /pageurl/update/': update
 };

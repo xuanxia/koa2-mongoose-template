@@ -1,6 +1,6 @@
 module.exports = {
     detailUrl  :    String,
-    createTime :    Date,
-    updateTime :    Date,
+   /* createTime :    Date,
+    updateTime :    Date,*/
     status     :    Boolean
 };
