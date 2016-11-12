@@ -33,6 +33,7 @@ module.exports.query = async (prams)=>{
         }
     });
     await TemplateModel.find({ $or:[{keyword:{"$regex":regex}},{title:{"$regex":regex}}]}).skip(skipCount).limit(limitCount).sort(sortconf).exec(function(err,result){
+
         if(err){
             logger.error("biz_template.js--query"+err);
             returnData.setStatus(0);

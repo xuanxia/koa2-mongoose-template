@@ -30,7 +30,7 @@ const  getCount = async ()=>{
 const getDetailPage = async ()=>{
     let pageList = []; //使用数组作为缓存
     //let count = await getCount();
-    let count = 1;
+    let count = 96; // 测试时使用
     for(let i = count; i >= 1;i --){
         let nextUrl =  url + "index_"+i+".shtml";
         await rp(nextUrl).then(function(body){
@@ -39,7 +39,7 @@ const getDetailPage = async ()=>{
             $(".thumbItem").eq(0).find("li").each(function(index,item){
                 const liDom = $(item);
                 let temp = {};
-                temp["detialUrl"] = "http://www.cssmoban.com" + liDom.find("a").eq(0).attr("href");
+                temp["detailUrl"] = "http://www.cssmoban.com" + liDom.find("a").eq(0).attr("href");
                 temp["status"] = false;
                 logger.debug(temp);
                 pageList.push(temp);
@@ -73,23 +73,20 @@ const queryThenSave = async()=>{
     let saveTimeStart = new Date().getTime();  //保存数据库开始时间
     for(let i =0,len = pageList.length;i<len; i++){
         let item =  pageList[i];
-        logger.debug("================================");
-        logger.info(item);
-        logger.debug("================================");
         let queryResult = await pageurlBiz.query({detailUrl:item.detailUrl});
-        logger.debug(queryResult);
         //有内容表示已保存过了
-        if(queryResult.data.status){
+        if( queryResult.data){
             data["existCount"] ++;
-            break;
-        }
-        let saveResult = await  pageurlBiz.save(item);
-        logger.debug(saveResult);
-        if(saveResult.status){
-            data["successCount"] ++;
         }else{
-            data["failCount"] ++;
+            let saveResult = await  pageurlBiz.save(item);
+            logger.debug(saveResult);
+            if(saveResult.status){
+                data["successCount"] ++;
+            }else{
+                data["failCount"] ++;
+            }
         }
+
 
     }
     data["saveTime"] = new Date().getTime() - saveTimeStart;  //保存数据库耗时

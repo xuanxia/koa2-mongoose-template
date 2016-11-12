@@ -9,6 +9,7 @@ const ResultData = require('../comm_unit/data_structure.js').ResultData;
 module.exports.save = async(prams)=>{
     let returnData = new ResultData();
     let pageUrl = new  PageUrlModel(prams);
+    //TODO 加校验 url带undefined的过滤
     await pageUrl.save(prams,function(err,result){
         if(err){
             logger.error("biz_pageurl.js--save"+err);
@@ -51,10 +52,12 @@ module.exports.remove = async(prams)=>{
 module.exports.query = async(prams)=>{
     let returnData = new ResultData();
     await PageUrlModel.findOne(prams).exec(function(err,result){
+        logger.info("查询结果==============");
+        logger.info(result);
         if(err){
             logger.error("biz_pageurl.js--update"+err);
             returnData.setStatus(0);
-            returnData.setMessage("更新失败");
+            returnData.setMessage("查询失败");
         }else{
             logger.debug(result);
             returnData.setStatus(1);

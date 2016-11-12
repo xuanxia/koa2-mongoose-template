@@ -1,23 +1,37 @@
-const db = require('../comm_unit/dbconn.js');
-const mongoose = require("mongoose");
-const PageUrlVo = require('../dbm/Pageurl.js');
-const PageUrlSchema = new mongoose.Schema(PageUrlVo);
-const PageUrlModel = db.model("pageurl",PageUrlSchema,"page_url");
 const logger = require('../comm_unit/log4js.js');
-const ResultData = require('../comm_unit/data_structure.js').ResultData;
-let returnData = new ResultData();
-let prams = { detialUrl: 'http://www.cssmoban.comundefined', status: false };
-let pageUrl = new  PageUrlModel(prams);
-pageUrl.save(prams,function(err,result){
+
+const db = require('../comm_unit/dbconn.js');
+const PageUrlVo = require('../dbm/Pageurl.js');
+const PageUrlModel = db.model("pageurl", {
+    detailUrl  :    String,
+    /* createTime :    Date,
+     updateTime :    Date,*/
+    status     :    Boolean
+});
+
+let pageUrl = new  PageUrlModel({ detailUrl: 'http://www.cssmoban.comundefined', status: false });
+
+pageUrl.save(function(err,result){
+    logger.debug(result);
     if(err || !result.status){
         logger.error("biz_pageurl.js--save"+err);
-        returnData.setStatus(0);
-        returnData.setMessage("新增失败");
+
     }else{
         logger.debug(result);
-        returnData.setStatus(1);
-        returnData.setMessage("新增成功");
-        returnData.setData(result);
+
     }
-    console.log(returnData);
+
 });
+
+
+/*const db = require('../comm_unit/dbconn.js');
+var Cat = db.model('Cat', { name: String });
+
+var kitty = new Cat({ name: 'jhgsjdfghj' });
+kitty.save(function (err) {
+    if (err) {
+        console.log(err);
+    } else {
+        console.log('meow');
+    }
+});*/
