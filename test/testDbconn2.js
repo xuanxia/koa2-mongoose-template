@@ -1,7 +1,7 @@
 const db = require('./dbconn2.js');
 const assert = require("assert");
 const mongoose = require("mongoose");
-const TemplateVo = require('../dbm/Template.js');
+const TemplateVo = require('../dbm/template.js');
 
    // assert.equal(Band.collection.findOne().constructor, require('bluebird'))
     console.log("===========mongodb连接成功============");

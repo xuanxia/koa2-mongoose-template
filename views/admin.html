@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{{title}}</title>
+    <script src="/static/js/jquery-min-2.1.0.js"></script>
+</head>
+<body>
+<button id="pageUrl">开始</button>
+<div id="showMessage">
+
+</div>
+<div id="isDone">
+
+</div>
+</body>
+<script>
+    $(function(){
+        $("#pageUrl").on('click',function(){
+            $.ajax({
+                url:"/page_url/update/",
+                type:'post',
+                timeout : 0, //永不超时
+                dataType:"json",
+                beforeSend:function(XHR){
+                    console.log(XHR);
+                },
+                success:function(data){
+                   if(data.status){
+                       alert(data.message);
+                       pollingProgress();
+                   }
+                },
+                complete:function(XHR, TS){
+                    console.log(XHR);
+                    console.log(TS);
+                }
+            });
+        });
+
+        //尾调 轮询进度
+        function pollingProgress(){
+            setTimeout(function(){
+                  $.ajax({
+                      url:"/url_operation/query/",
+                      type:'post',
+                      timeout : 0, //永不超时
+                      dataType:"json",
+                      beforeSend:function(XHR){
+
+                      },
+                      success:function(data){
+                          $("#showMessage").html(JSON.stringify(result));
+                          //如果未完成 则继续调用
+                           if(!result.data.pageUrlIsReady){
+                               pollingProgress();
+                           }else{
+                               $("#isDone").html("操作完成");
+                           }
+                      },
+                      complete:function(XHR, TS){
+
+                      }
+                  });
+              },1000);
+          }
+    });
+
+</script>
+</html>

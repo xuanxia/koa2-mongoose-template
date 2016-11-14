@@ -1,6 +1,6 @@
 const mongoose = require('./dbconn.js');
 const db = mongoose.connection;
-const TemplateVo = require('../dbm/Template.js');
+const TemplateVo = require('../dbm/template.js');
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
         console.log("===========mongodb连接成功============");
