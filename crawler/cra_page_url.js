@@ -2,8 +2,8 @@ const request = require('request');
 const cheerio = require('cheerio');
 const logger = require('../comm_unit/log4js.js');
 const rp = require('request-promise');
-const pageurlBiz = require('../business/biz_page_url.js');
-const operationBiz = require('../business/biz_url_operation.js');
+const pageUrlBiz = require('../business/biz_page_url.js');
+const operationBiz = require('../business/biz_page_url_operation.js');
 const ResultData = require('../comm_unit/data_structure.js').ResultData;
 let url = "http://www.cssmoban.com/cssthemes/";
 /*
@@ -65,7 +65,6 @@ const getDetailPage = async ()=>{
  *
  * */
 
-
 const queryThenSave = async()=>{
     let returnData = new ResultData();
     let queryTimeStart = new Date().getTime();  //爬页面开始时间
@@ -81,14 +80,15 @@ const queryThenSave = async()=>{
     let saveTimeStart = new Date().getTime();  //保存数据库开始时间
     for(let i =0,len = pageList.length;i<len; i++){
         let item =  pageList[i];
-        let queryResult = await pageurlBiz.query({detailUrl:item.detailUrl});
+        let queryResult = await pageUrlBiz.findOne({detailUrl:item.detailUrl});
         //有内容表示已保存过了
         if( queryResult.data){
             data["pageUrlDbExistCount"] ++;
         }else{
-            let saveResult = await  pageurlBiz.save(item);
+            let saveResult = await  pageUrlBiz.save(item);
             logger.debug(saveResult);
             if(saveResult.status){
+
                 data["pageUrlDbCount"] ++;
             }else{
                 data["pageUrlFailCount"] ++;
@@ -117,8 +117,6 @@ const queryThenSave = async()=>{
     returnData.setData(data);
     return returnData;
 };
-
-
 
 
 module.exports = async()=>{

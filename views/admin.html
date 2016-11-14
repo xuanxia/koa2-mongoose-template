@@ -6,11 +6,19 @@
     <script src="/static/js/jquery-min-2.1.0.js"></script>
 </head>
 <body>
-<button id="pageUrl">开始</button>
+<button id="pageUrl">获取url开始</button>
 <div id="showMessage">
 
 </div>
 <div id="isDone">
+
+</div>
+
+<button id="detailInfo">获取详情开始</button>
+<div id="showMessage1">
+
+</div>
+<div id="isDone1">
 
 </div>
 </body>
@@ -18,9 +26,8 @@
     $(function(){
         $("#pageUrl").on('click',function(){
             $.ajax({
-                url:"/page_url/update/",
+                url:"/page_url/crawler/",
                 type:'post',
-                timeout : 0, //永不超时
                 dataType:"json",
                 beforeSend:function(XHR){
                     console.log(XHR);
@@ -37,7 +44,7 @@
                 }
             });
         });
-
+        pollingProgress();
         //尾调 轮询进度
         function pollingProgress(){
             setTimeout(function(){
@@ -49,7 +56,7 @@
                       beforeSend:function(XHR){
 
                       },
-                      success:function(data){
+                      success:function(result){
                           $("#showMessage").html(JSON.stringify(result));
                           //如果未完成 则继续调用
                            if(!result.data.pageUrlIsReady){
@@ -62,8 +69,58 @@
 
                       }
                   });
-              },1000);
+              },3000);
           }
+
+        $("#detailInfo").on('click',function(){
+            $.ajax({
+                url:"/detail_info/crawler/",
+                type:'post',
+                dataType:"json",
+                beforeSend:function(XHR){
+                    console.log(XHR);
+                },
+                success:function(data){
+                    if(data.status){
+                        alert(data.message);
+                        pollingProgress1();
+                    }
+                },
+                complete:function(XHR, TS){
+                    console.log(XHR);
+                    console.log(TS);
+                }
+            });
+        });
+
+        //尾调 轮询进度
+        function pollingProgress1(){
+            setTimeout(function(){
+                $.ajax({
+                    url:"/detail_info_operation/query/",
+                    type:'post',
+                    timeout : 0, //永不超时
+                    dataType:"json",
+                    beforeSend:function(XHR){
+
+                    },
+                    success:function(result){
+                        $("#showMessage1").html(JSON.stringify(result));
+                        //如果未完成 则继续调用
+                        if(!result.data.pageUrlIsReady){
+                            pollingProgress1();
+                        }else{
+                            $("#isDone1").html("操作完成");
+                        }
+                    },
+                    complete:function(XHR, TS){
+
+                    }
+                });
+            },1000);
+        }
+
+
     });
 
 </script>

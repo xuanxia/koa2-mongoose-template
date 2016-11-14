@@ -1,10 +1,3 @@
-
-
-
-
-
-
-
 const request = require('request');
 const cheerio = require('cheerio');
 const logger = require('../comm_unit/log4js.js');

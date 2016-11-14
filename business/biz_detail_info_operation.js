@@ -1,30 +1,28 @@
 const db = require('../comm_unit/db_conn.js');
 const mongoose = require("mongoose");
-const OperationVo = require('../dbm/page_operation.js');
+const OperationVo = require('../dbm/detail_info_operation.js');
 const OperationSchema = new mongoose.Schema(OperationVo);
-const OperationModel = db.model("operation_status",OperationSchema,"operation_status");
+const OperationModel = db.model("detail_info_operation",OperationSchema,"detail_info_operation");
 const logger = require('../comm_unit/log4js.js');
 const ResultData = require('../comm_unit/data_structure.js').ResultData;
 
 //初始化 将数据库中的数据清空
 module.exports.init  = async()=>{
     let prams = {
-        pageUrlIsReady:   false,  //获取详情地址是否完成,
-        pageUrlQueryReady:   false,  //获取详情地址是否完成,
-        pageCount     :   0,   //已获取页面总数
-        pageUrlCount  :   0,   //已搜索详情地址数量
-        pageUrlDbCount:   0,   //已保存详情地址数量
-        pageUrlDbExistCount:   0,   //已存在地址数量
-        pageUrlFailCount   :   0,   //保存时失败的数量
-        pageUrlQueryTime   :   0,  //搜索页面花费时长
-        pageUrlSaveTime    :   0  //保存页面花费时长
+        detailInfoIsReady:   false,  //获取详情地址是否完成,
+        pageCount        :   0,   //待处理页面总数量
+        detailInfoSuccessCount  :   0,   //已经获取详情并入库成功数量
+        detailInfoQueryFailsCount  :   0,   //获取详情页面失败数量
+        detailInfoSaveFailsCount  :   0,   //入库失败数量
+        detailInfoQueryTime   :   0,  //搜索页面花费总时长
+        detailInfoSaveTime    :   0  //保存页面花费总时长
     };
     let returnData = new ResultData();
     let option = null;
     await OperationModel.findOne({}).exec(function(err,result){
         option = result;
     });
-   
+
     if(!option){
         let options = new  OperationModel(prams);
         await options.save(prams,function(err,result){
@@ -85,7 +83,7 @@ module.exports.remove = async(prams)=>{
 
 };
 
-module.exports.query = async(prams)=>{
+module.exports.findOne = async(prams)=>{
     let returnData = new ResultData();
     await OperationModel.findOne(prams).exec(function(err,result){
         logger.info("查询结果==============");

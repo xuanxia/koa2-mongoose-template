@@ -1,15 +1,15 @@
 /*
-*
-* @controller pageurl 负责处理 由各个网站的下载页面地址
-* */
+ *
+ * @controller  启动爬取资源详细信息方法
+ * */
 const logger = require('../comm_unit/log4js.js');
-const getPageUrlList = require('../crawler/cra_page_url.js');
+const setDetailInfo = require('../crawler/cra_detail_info.js');
 const ResultData = require('../comm_unit/data_structure.js').ResultData;
 const crawler = async(ctx,next)=>{
     logger.info(ctx.request.body);
     //TODO  判断爬虫是否正在操作
-    getPageUrlList(); // 不采用同步方式返回数据 将操作数据记录在中间表中 通过前端轮询查看进度
-    let returnData    = new ResultData();
+    setDetailInfo(); // 不采用同步方式返回数据 将操作数据记录在中间表中 通过前端轮询查看进度
+    let returnData   = new ResultData();
     returnData.setStatus(1);
     returnData.setData({});
     returnData.setMessage("后台爬虫已启动");
@@ -18,5 +18,5 @@ const crawler = async(ctx,next)=>{
 };
 
 module.exports = {
-    'POST /page_url/crawler/': crawler
+    'POST /detail_info/crawler/': crawler
 };
