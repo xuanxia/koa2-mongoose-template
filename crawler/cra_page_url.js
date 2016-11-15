@@ -42,10 +42,17 @@ const getDetailPage = async ()=>{
             $(".thumbItem").eq(0).find("li").each(function(index,item){
                 const liDom = $(item);
                 let temp = {};
-                temp["detailUrl"] = "http://www.cssmoban.com" + liDom.find("a").eq(0).attr("href");
-                temp["status"] = false;
-                logger.debug(temp);
-                pageList.push(temp);
+                let detailUrl = liDom.find("a").eq(0).attr("href");
+                if(detailUrl){
+                    temp["detailUrl"] = "http://www.cssmoban.com" + detailUrl;
+                    temp["status"] = false;
+                    logger.debug(temp);
+                    pageList.push(temp);
+                }else{
+                    logger.debug("这肯定是一个广告DIV块");
+                }
+
+
             });
         }).catch(function(err){
             logger.info("抓取"+nextUrl+"网页发生错误："+err);

@@ -164,3 +164,13 @@ article{
     -ms-border-radius: 4px;
 }
 /*-- footer-ends --*/
+
+/*---admin-start --*/
+.red{
+    color: red;
+}
+.admin-content{
+    height: 500px;
+    margin-top: 60px;
+}
+/*---admin-end --*/

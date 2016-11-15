@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+{% block body %}
+<article>
+    <h4 class="red">
+        这个页面基于前2步搜索出来的数据 首页的数据是原有的经过下载-解压-处理文件-打包-上传七牛云-录入数据库脚本处理的基础数据
+        这部分脚本会逐步集成进来通过接口去调用控制
+    </h4>
+    <div class="container search" id="queryDiv">
+        <div class="search_sub">
+            <input type="text" id="keyword"  value="{{model.keyword}}">
+            <button id="queryButton" onclick="search()">search</button>
+        </div>
+    </div>
+
+    <div class="container" id="contentList">
+        <div class="row">
+            {% for item in items %}
+            <div class="col-sm-4 col-md-3" style="height: 280px">
+                <div class="thumbnail">
+                    <a href="{{item.previewUrl}}"  target="_blank"><img src="{{baseInfo.imgHost}}{{item.imgUrl}}" width="203" height="144" alt="{{item.keyword}}"></a>
+                    <div class="caption">
+                        <!--<h3></h3>-->
+                        <p style="height: 40px">{{item.title}}</p>
+                        <p><a href="{{item.downLoadUrl}}" onclick="updateDownloadCount('{{item.id}}')" class="btn btn-primary" role="button">下载</a>
+                            <a href="{{item.previewUrl}}" target="_blank" class="btn btn-danger" role="button">预览</a></p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="container" >
+        <nav style="text-align: center">
+            <input type="hidden" value="{{model.keyword}}" id="model_keyword">
+            <input type="hidden" value="{{model.sortName}}" id="model_sortName">
+            <input type="hidden" value="{{model.sortType}}" id="model_sortType">
+            <ul class="pagination" id="pageList">
+                <li pagecount="1"><a href="#">首页</a></li>
+                {%if model.page == 1 %}
+                <li class="disabled"><a href="#">上一页</a></li>
+                {%else%}
+                <li pagecount="{{model.prepage}}"><a href="#">上一页</a></li>
+                {%endif%}
+
+                {% for pagecount in model.pageNum%}
+                {% if pagecount == model.page%}
+                <li pagecount="{{pagecount}}" class="active"><a href="#">{{pagecount}}<span class="sr-only">(current)</span></a></li>
+                {%else%}
+                <li pagecount="{{pagecount}}"><a href="#">{{pagecount}}</a></li>
+                {%endif%}
+
+                {%endfor%}
+
+                {%if model.page == model.pagetotal %}
+                <li class="disabled"><a href="#">下一页</a></li>
+                {%else%}
+                <li pagecount="{{model.nextpage}}"><a href="#">下一页</a></li>
+                {%endif%}
+
+                <li pagecount="{{model.pagetotal}}"><a href="#">最后一页</a></li>
+
+            </ul>
+        </nav>
+    </div>
+</article>
+<script>
+    /*
+     * 全局变量
+     *
+     * */
+    var prams = {};
+    prams.pagesize = 32;
+
+    $(function(){
+
+        /*
+         *
+         * 高亮显示搜索关键字
+         * */
+        SearchHighlight("contentList", $("#keyword").val());
+
+        /*
+         *
+         * 分页注册点击事件
+         *
+         * */
+        $("#pageList li").bind("click",function(){
+            prams.keyword = $("#model_keyword").val();
+            prams.sortName = $("#model_sortName").val();
+            prams.sortType = $("#model_sortType").val();
+            prams.currentpage = $(this).attr("pagecount");
+            location.href = getUrl(prams);
+        });
+        /*
+         *
+         * enter键触发查询
+         *
+         * */
+        $("#queryDiv").bind("keydown",function(e){
+            // 兼容FF和IE和Opera
+            var theEvent = e || window.event;
+            var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
+            if (code == 13) {
+                //回车执行查询
+                $("#queryButton").click();
+            }
+        });
+    });
+
+    /*
+     *
+     * 获取携带参数的url
+     *
+     * */
+    function getUrl(prams){
+        var result =[];
+        result.push("/demo/?t="+ new Date().getTime());
+        for(item in prams){
+            if(prams[item]){
+                result.push("&"+item+"="+prams[item]);
+            }else{
+                delete prams[item]
+            }
+        }
+        return result.join("");
+    }
+    /*
+     *
+     * 根据关键字查询
+     *
+     * */
+    function search(){
+        prams.currentpage = 1;
+        prams.keyword = $("#keyword").val();
+        location.href =  getUrl(prams);;
+    }
+    /*
+     *
+     * 高亮显示搜索关键字
+     * @idVal  div ID
+     * @keyword 关键字
+     * */
+    function SearchHighlight(idVal, keyword) {
+        var pucl = document.getElementById(idVal);
+        if ("" == keyword) return;
+        var temp = pucl.innerHTML;
+        var htmlReg = new RegExp("\<.*?\>", "i");
+        var arrA = new Array();
+        //替换HTML标签
+        for (var i = 0; true; i++) {
+            var m = htmlReg.exec(temp);
+            if (m) {
+                arrA[i] = m;
+            }
+            else {
+                break;
+            }
+            temp = temp.replace(m, "{[(" + i + ")]}");
+        }
+        words = unescape(keyword.replace(/\+/g, ' ')).split(/\s+/);
+        //替换关键字
+        for (w = 0; w < words.length; w++) {
+            var r = new RegExp("(" + words[w].replace(/[(){}.+*?^$|\\]/g, "\\$&") + ")", "ig");
+            temp = temp.replace(r, "<b style='color:Red;'>$1</b>");
+        }
+        //恢复HTML标签
+        for (var i = 0; i < arrA.length; i++) {
+            temp = temp.replace("{[(" + i + ")]}", arrA[i]);
+        }
+        pucl.innerHTML = temp;
+    }
+
+    /*
+     *
+     * 统计下载数量
+     * */
+
+    function updateDownloadCount(id){
+        $.ajax({
+            url:"/template/update/",
+            type:'post',
+            dataType:"json",
+            data:{id:id},
+            success:function(data){
+                console.log(data);
+            }
+        });
+    }
+
+</script>
+{% endblock %}
+

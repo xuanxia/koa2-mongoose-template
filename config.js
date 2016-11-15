@@ -2,7 +2,7 @@ module.exports = {
     mongodb:{
         host:"120.27.125.78",
         port:"27017",
-        dataBaseName:"template",
+        dataBaseName:"template_test",
         options :{
             db: { native_parser: true },
             server: { poolSize: 5 },
@@ -26,6 +26,7 @@ module.exports = {
     baseInfo:{
         version:"1.0.0",
         qiniuHost:"http://ofqujgtgd.bkt.clouddn.com",
-        preViewHost:"http://120.27.125.78/"
+        preViewHost:"http://120.27.125.78/",
+        imgHost:"http://www.cssmoban.com"
     }
 };

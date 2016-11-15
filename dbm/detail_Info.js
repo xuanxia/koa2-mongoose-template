@@ -6,5 +6,6 @@ module.exports = {
     title       :   String,
     keyword     :   String,
     createDate  :   Date,
-    updateDate  :   Date
+    updateDate  :   Date,
+    downloadCount:  Number
 };

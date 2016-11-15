@@ -78,6 +78,7 @@ const getDetailInfo = async(url)=>{
 
     }).catch(function(err){
         logger.info("抓取"+nextUrl+"网页发生错误："+err);
+        return resultData;
     });
 
     return resultData;

@@ -1,7 +1,7 @@
 const config = require('../config.js');
 const templateBiz = require('../business/biz_template.js');
 const ErrData = require('../comm_unit/data_structure.js').ErrData;
-var fn_index = async(ctx,next)=>{
+const fn_index = async(ctx,next)=>{
     const returnData = await templateBiz.query(ctx.query);
     if(returnData.status === 1){
         ctx.render('index.html', {

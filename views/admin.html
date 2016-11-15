@@ -1,29 +1,83 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>{{title}}</title>
-    <script src="/static/js/jquery-min-2.1.0.js"></script>
-</head>
-<body>
-<button id="pageUrl">获取url开始</button>
-<div id="showMessage">
+{% extends "base.html" %}
+{% block body %}
 
+<div class="container admin-content" >
+    <p><h4>提示:</h4><span class="red">  请按照执行步骤执行 如果中途手动关闭了服务,请将数据库中两个operation文档手动删除 否则程序会一直认为后台还在运行爬虫</span></p>
+    <div class="col-sm-12">
+      <h4>1： 获取资源详情页面地址</h4>
+        <button class="btn btn-danger" id="pageUrl">开始</button>
+        <span id="startMessage"></span>
+    </div>
+    <div class="col-sm-12">
+        <div class="row">
+            <div class="col-sm-6">
+                <b>转取页面是否完成： <span class="red" id="pageUrlQueryReady"></span></b>
+            </div>
+            <div class="col-sm-6">
+                <b>保存数据库是否完成： <span class="red" id="pageUrlIsReady"></span></b>
+            </div>
+            <div class="col-sm-6">
+                <b>分页页面总数： <span class="red" id="pageCount"></span></b>
+            </div>
+            <div class="col-sm-6">
+               <b>抓取详情页面数： <span class="red" id="pageUrlCount"></span></b>
+            </div>
+            <div class="col-sm-6">
+                <b>保存成功数： <span class="red" id="pageUrlDbCount"></span></b>
+            </div>
+            <div class="col-sm-6">
+                <b>保存失败数： <span class="red" id="pageUrlFailCount"></span></b>
+            </div>
+            <div class="col-sm-6">
+                <b>数据库中已存在数： <span class="red" id="pageUrlDbExistCount"></span></b>
+            </div>
+            <div class="col-sm-6">
+                <b>页面查询耗时： <span class="red" id="pageUrlQueryTime"></span>ms</b>
+            </div>
+            <div class="col-sm-6">
+                <b>数据保存耗时： <span class="red" id="pageUrlSaveTime"></span>ms</b>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-12">
+        <h4>2： 抓取详情信息入库</h4>
+        <button class="btn btn-danger" id="detailInfo">开始</button>
+        <span id="startMessage1"></span>
+    </div>
+    <div class="col-sm-12">
+        <div class="row">
+            <div class="col-sm-6">
+                <b>保存信息是否完成： <span class="red" id="detailInfoIsReady"></span></b>
+            </div>
+
+            <div class="col-sm-6">
+                <b>待处理详情页面数： <span class="red" id="pageCounts"></span></b>
+            </div>
+            <div class="col-sm-6">
+                <b>爬取页面失败数： <span class="red" id="detailInfoQueryFailsCount"></span></b>
+            </div>
+            <div class="col-sm-6">
+                <b>保存成功数： <span class="red" id="detailInfoSuccessCount"></span></b>
+            </div>
+            <div class="col-sm-6">
+                <b>保存失败数： <span class="red" id="detailInfoSaveFailsCount"></span></b>
+            </div>
+            <div class="col-sm-6">
+                <b>查询并保存总耗时： <span class="red" id="detailInfoQueryAndSaveTime"></span>ms</b>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-12">
+        <h4>3： <a href="/demo/">打开页面查看</a></h4>
+    </div>
 </div>
-<div id="isDone">
 
-</div>
 
-<button id="detailInfo">获取详情开始</button>
-<div id="showMessage1">
-
-</div>
-<div id="isDone1">
-
-</div>
-</body>
 <script>
     $(function(){
+        //TODO 页面初始化时调接口查看后台是否在运行爬虫 运行的话则需要启动轮询查看进度
         $("#pageUrl").on('click',function(){
             $.ajax({
                 url:"/page_url/crawler/",
@@ -34,8 +88,11 @@
                 },
                 success:function(data){
                    if(data.status){
-                       alert(data.message);
-                       pollingProgress();
+                      $(this).attr("disabled","disabled");
+                       $("#startMessage").html("后台爬虫已经启动，请耐心等待");
+                        pollingProgress();
+                   }else{
+                       alert("后台提示: "+data.message);
                    }
                 },
                 complete:function(XHR, TS){
@@ -44,25 +101,39 @@
                 }
             });
         });
-        pollingProgress();
         //尾调 轮询进度
         function pollingProgress(){
             setTimeout(function(){
                   $.ajax({
                       url:"/url_operation/query/",
                       type:'post',
-                      timeout : 0, //永不超时
                       dataType:"json",
                       beforeSend:function(XHR){
 
                       },
                       success:function(result){
-                          $("#showMessage").html(JSON.stringify(result));
+                          $("#pageCount").html(result.data.pageCount);
+                          $("#pageUrlDbCount").html(result.data.pageUrlDbCount);
+                          $("#pageUrlCount").html(result.data.pageUrlCount);
+                          $("#pageUrlDbExistCount").html(result.data.pageUrlDbExistCount);
+                          $("#pageUrlFailCount").html(result.data.pageUrlFailCount);
+                          if(result.data.pageUrlIsReady){
+                              $("#pageUrlIsReady").html("已完成");
+                          }else{
+                              $("#pageUrlIsReady").html("未完成");
+                          }
+                          if(result.data.pageUrlQueryReady){
+                              $("#pageUrlQueryReady").html("已完成");
+                          }else{
+                              $("#pageUrlQueryReady").html("未完成");
+                          }
+                          $("#pageUrlQueryTime").html(result.data.pageUrlQueryTime);
+                          $("#pageUrlSaveTime").html(result.data.pageUrlSaveTime);
                           //如果未完成 则继续调用
                            if(!result.data.pageUrlIsReady){
                                pollingProgress();
                            }else{
-                               $("#isDone").html("操作完成");
+                               $("#startMessage").html("操作已经完成！");
                            }
                       },
                       complete:function(XHR, TS){
@@ -72,7 +143,8 @@
               },3000);
           }
 
-        $("#detailInfo").on('click',function(){
+
+       $("#detailInfo").on('click',function(){
             $.ajax({
                 url:"/detail_info/crawler/",
                 type:'post',
@@ -82,8 +154,11 @@
                 },
                 success:function(data){
                     if(data.status){
-                        alert(data.message);
-                        pollingProgress1();
+                        $(this).attr("disabled","disabled");
+                        $("#startMessage1").html("后台爬虫已经启动,请耐心等待");
+                        detailPollingProgress();
+                    }else{
+                        alert("后台提示: "+data.message);
                     }
                 },
                 complete:function(XHR, TS){
@@ -94,34 +169,39 @@
         });
 
         //尾调 轮询进度
-        function pollingProgress1(){
+        function detailPollingProgress(){
             setTimeout(function(){
                 $.ajax({
                     url:"/detail_info_operation/query/",
                     type:'post',
-                    timeout : 0, //永不超时
                     dataType:"json",
                     beforeSend:function(XHR){
-
                     },
                     success:function(result){
-                        $("#showMessage1").html(JSON.stringify(result));
-                        //如果未完成 则继续调用
-                        if(!result.data.pageUrlIsReady){
-                            pollingProgress1();
+                        $("#pageCounts").html(result.data.pageCount);
+                        $("#detailInfoQueryFailsCount").html(result.data.detailInfoQueryFailsCount);
+                        $("#detailInfoSaveFailsCount").html(result.data.detailInfoSaveFailsCount);
+                        $("#detailInfoSuccessCount").html(result.data.detailInfoSuccessCount);
+                        if(result.data.detailInfoIsReady){
+                            $("#detailInfoIsReady").html("已完成");
+                            $("#startMessage1").html("操作已经完成！");
                         }else{
-                            $("#isDone1").html("操作完成");
+                            $("#detailInfoIsReady").html("未完成");
+                            //如果未完成 则继续调用
+                            detailPollingProgress();
                         }
+                        $("#detailInfoQueryAndSaveTime").html(result.data.pageUrlQueryTime);
+
                     },
                     complete:function(XHR, TS){
 
                     }
                 });
-            },1000);
+            },3000);
         }
 
 
     });
 
 </script>
-</html>
+{% endblock %}
