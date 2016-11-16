@@ -46,19 +46,19 @@ web服务使用的koa2 async await写法处理异步 感觉真棒
 
 3: 打开浏览器 http://127.0.0.1:3000/admin/ 查看
 
-![QQ截图20161116111630.png](//dn-cnode.qbox.me/Fm25D3Y8utqV1buVv4jsf4U5X986)
+![QQ截图20161116111630.png](http://dn-cnode.qbox.me/Fm25D3Y8utqV1buVv4jsf4U5X986)
 
 4：执行第一步 抓取页面地址
 
-![QQ截图20161116113504.png](//dn-cnode.qbox.me/FuItkOfPZBa1HNEupPKRFK-V1BmO)
+![QQ截图20161116113504.png](http://dn-cnode.qbox.me/FuItkOfPZBa1HNEupPKRFK-V1BmO)
 
 5：执行第二步 抓取信息入库 
 
-![QQ截图20161116114024.png](//dn-cnode.qbox.me/FmyXKN8OY3IBbBTBiRu3Us8uE0UA)
+![QQ截图20161116114024.png](http://dn-cnode.qbox.me/FmyXKN8OY3IBbBTBiRu3Us8uE0UA)
 
 6：打看页面查看抓取的数据
 
-![QQ截图20161116114301.png](//dn-cnode.qbox.me/FuqJ9E5vYhM-nyPhwVVO9cK7YblS)
-![QQ截图20161116114502.png](//dn-cnode.qbox.me/FprnwRgyZjrYjKBgMp21UyuYAbm8)
+![QQ截图20161116114301.png](http://dn-cnode.qbox.me/FuqJ9E5vYhM-nyPhwVVO9cK7YblS)
+![QQ截图20161116114502.png](http://dn-cnode.qbox.me/FprnwRgyZjrYjKBgMp21UyuYAbm8)
 
 
