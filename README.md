@@ -29,6 +29,7 @@ web服务使用的koa2 async await写法处理异步 感觉真棒
 
 前端页面使用的bt3.5 + jquery
 
+线上地址 http://120.27.125.78:3000/
 ## 注意事项
 
 使用了KOA2 ES6语法 node版本需要支持ES6
@@ -44,7 +45,7 @@ web服务使用的koa2 async await写法处理异步 感觉真棒
 
 2：npm start
 
-3: 打开浏览器 http://127.0.0.1:3000/admin/ 查看
+3: 打开浏览器 http://127.0.0.1:3000/admin/ 查看 
 
 ![QQ截图20161116111630.png](http://dn-cnode.qbox.me/Fm25D3Y8utqV1buVv4jsf4U5X986)
 
